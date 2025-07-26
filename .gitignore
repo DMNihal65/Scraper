@@ -1,0 +1,22 @@
+# Ignore compiled binaries and build artifacts
+*.o
+*.bin
+build/
+
+.venv
+
+# Ignore log files
+*.log
+logs/
+
+# Ignore sensitive information
+.env
+config/secrets.py
+
+# Ignore IDE-specific files
+.idea/
+.vscode/
+
+# Ignore operating system generated files
+.DS_Store
+Thumbs.db
