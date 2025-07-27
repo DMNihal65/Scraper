@@ -138,10 +138,10 @@ class GitHubActionsJobScraper:
 
             # Use exact same query as working code
             query = Query(
-                query="Data Engineer",
+                query="Software Engineer",
                 options=QueryOptions(
                     locations=["Bangalore, India"],
-                    limit=20,
+                    limit=30,
                     filters=QueryFilters(
                         time=TimeFilters.DAY,
                         experience=[
