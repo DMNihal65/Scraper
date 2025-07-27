@@ -141,7 +141,7 @@ class GitHubActionsJobScraper:
                 query="Software Engineer",
                 options=QueryOptions(
                     locations=["Bangalore, India"],
-                    limit=30,
+                    limit=60,
                     filters=QueryFilters(
                         time=TimeFilters.DAY,
                         experience=[
@@ -207,7 +207,7 @@ class GitHubActionsJobScraper:
            • "Full Stack Developer"
            or any software development roles dont stress to much on this not so imporant becasue titles may variy but focus on the skills and experince
 
-        2. Skills Match: Mentions at least **two-three** of these skills (case-insensitive):
+        2. Skills Match: Mentions at least **two** of these skills (case-insensitive):
            Python, ReactJS, VueJS, Postgres, SQL, AWS, Azure, DevOps, Docker, Kubernetes, PySpark, ETL, ELT, Node.js, FastAPI
 
         3. Experience Level: Specifies or implies **0–2 years** of experience (e.g., "0–2 years," "entry level," "freshers," "1 year," "up to 2 years")
