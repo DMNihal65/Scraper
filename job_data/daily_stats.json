@@ -1,0 +1,35 @@
+[
+  {
+    "date": "2025-07-27",
+    "runs": 5,
+    "total_scraped": 31,
+    "total_filtered": 4,
+    "runs_detail": [
+      {
+        "time": "02:06",
+        "scraped": 0,
+        "filtered": 0
+      },
+      {
+        "time": "10:44",
+        "scraped": 0,
+        "filtered": 0
+      },
+      {
+        "time": "10:47",
+        "scraped": 0,
+        "filtered": 0
+      },
+      {
+        "time": "10:53",
+        "scraped": 19,
+        "filtered": 3
+      },
+      {
+        "time": "10:58",
+        "scraped": 12,
+        "filtered": 1
+      }
+    ]
+  }
+]

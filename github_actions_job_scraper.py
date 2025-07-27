@@ -52,16 +52,40 @@ FILTERED_JOBS_FILE = PERSISTENT_DIR / "filtered_jobs_history.json"
 LAST_RUN_FILE = PERSISTENT_DIR / "last_run.json"
 DAILY_STATS_FILE = PERSISTENT_DIR / "daily_stats.json"
 
+# Global list to store scraped jobs (same pattern as working code)
+jobs = []
+
+def on_data(data: EventData):
+    """Callback for scraped job data - matches working code exactly"""
+    # Normalize date exactly like working code
+    date_val = getattr(data.date, "isoformat", lambda: str(data.date))()
+    jobs.append({
+        "job_id": data.job_id,
+        "title": data.title,
+        "company": data.company,
+        "location": data.place,
+        "date": date_val,
+        "link": data.link,
+        "description": data.description,
+    })
+
+def on_error(err):
+    """Error callback - matches working code exactly"""
+    logger.error("Scraping error: %s", err)
+
+def on_end():
+    """End callback - matches working code exactly"""
+    logger.info("Scraping completed: %d jobs collected", len(jobs))
+
 
 class GitHubActionsJobScraper:
     def __init__(self):
-        self.jobs = []
-        self.gemini_client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+        self.gemini_client = genai.Client(api_key="AIzaSyB0S0J-e72-xgLTy0wYFYrlbH2JpI4EGB8")
         self.email_config = {
             'smtp_server': 'smtp.gmail.com',
             'smtp_port': 587,
-            'email': os.getenv("GMAIL_EMAIL"),
-            'password': os.getenv("GMAIL_APP_PASSWORD")
+            'email': "nihaldm65@gmail.com",
+            'password': "yhmx tton fkdw dtcb"
         }
 
     def load_json_file(self, file_path):
@@ -69,7 +93,10 @@ class GitHubActionsJobScraper:
         if file_path.exists():
             try:
                 with open(file_path, 'r', encoding='utf-8') as f:
-                    return json.load(f)
+                    content = f.read().strip()
+                    if not content:  # Handle empty files
+                        return []
+                    return json.loads(content)
             except (json.JSONDecodeError, FileNotFoundError) as e:
                 logger.warning(f"Could not load {file_path}: {e}")
                 return []
@@ -88,52 +115,33 @@ class GitHubActionsJobScraper:
         """Extract job IDs from existing job list"""
         return {job.get('job_id') for job in job_list if job.get('job_id')}
 
-    def on_data(self, data: EventData):
-        """Callback for scraped job data"""
-        try:
-            date_val = getattr(data.date, "isoformat", lambda: str(data.date))()
-            self.jobs.append({
-                "job_id": data.job_id,
-                "title": data.title,
-                "company": data.company,
-                "location": data.place,
-                "date": date_val,
-                "link": data.link,
-                "description": data.description,
-                "scraped_at": datetime.now().isoformat()
-            })
-        except Exception as e:
-            logger.error(f"Error processing job data: {e}")
-
-    def on_error(self, err):
-        logger.error(f"Scraping error: {err}")
-
-    def on_end(self):
-        logger.info(f"Scraping completed: {len(self.jobs)} jobs collected")
-
     def scrape_jobs(self):
-        """Scrape jobs from LinkedIn"""
+        """Scrape jobs from LinkedIn - uses same pattern as working code"""
+        global jobs
         logger.info("Starting job scraping...")
-        self.jobs = []
+        jobs = []  # Reset global jobs list
 
         try:
+            # Use exact same parameters as working code
             scraper = LinkedinScraper(
                 chrome_executable_path=None,
                 headless=True,
                 max_workers=1,
-                slow_mo=2.0,  # Slower for stability
-                page_load_timeout=90,
+                slow_mo=1.0,
+                page_load_timeout=60,
             )
 
-            scraper.on(Events.DATA, self.on_data)
-            scraper.on(Events.ERROR, self.on_error)
-            scraper.on(Events.END, self.on_end)
+            # Use global functions as callbacks (same as working code)
+            scraper.on(Events.DATA, on_data)
+            scraper.on(Events.ERROR, on_error)
+            scraper.on(Events.END, on_end)
 
+            # Use exact same query as working code
             query = Query(
                 query="Data Engineer",
                 options=QueryOptions(
                     locations=["Bangalore, India"],
-                    limit=50,
+                    limit=20,
                     filters=QueryFilters(
                         time=TimeFilters.DAY,
                         experience=[
@@ -145,22 +153,23 @@ class GitHubActionsJobScraper:
             )
 
             scraper.run([query])
-            logger.info(f"Successfully scraped {len(self.jobs)} jobs")
-            return self.jobs
+            logger.info(f"Successfully scraped {len(jobs)} jobs")
+            return jobs
 
         except Exception as e:
             logger.error(f"Scraping failed: {e}")
             return []
 
     def filter_with_gemini(self, jobs_to_filter):
-        """Filter jobs using Gemini API"""
+        """Filter jobs using Gemini API - matches working code exactly"""
         if not jobs_to_filter:
             logger.info("No jobs to filter")
             return []
 
+        # Initialize empty list for filtered results
         filtered = []
 
-        # Define JSON schema
+        # Define a minimal JSON schema: an array of objects with at least job_id
         schema = types.Schema(
             type=types.Type.ARRAY,
             items=types.Schema(
@@ -172,30 +181,42 @@ class GitHubActionsJobScraper:
             )
         )
 
+        # Prepare a config that forces JSON output
         config = types.GenerateContentConfig(
             response_mime_type="application/json",
             response_schema=schema
         )
 
-        # Process jobs in smaller chunks for better reliability
-        chunk_size = 8  # Smaller chunks for GitHub Actions
-        for i in range(0, len(jobs_to_filter), chunk_size):
-            chunk = jobs_to_filter[i:i + chunk_size]
+        # Send two fixed chunks of 10 jobs each (exactly like working code)
+        for start in (0, 10):
+            chunk = jobs_to_filter[start : start + 10]
+            if not chunk:
+                continue
 
+            # Use exact same prompt as working code
             prompt = f"""
-            You receive a JSON array of LinkedIn job postings. Filter and return only those that meet ALL criteria:
+        You receive a JSON array of LinkedIn job postings. Each posting includes fields: job_id, title, company, location, date, link, and description.
 
-            1. Role Title: Contains "Data Engineer", "Software Engineer", "Backend Developer", "Full Stack Developer", or similar software development roles
+        Filter and return only those postings that meet ALL of the following criteria:
 
-            2. Skills Match: Mentions at least 2-3 of these skills (case-insensitive):
-               Python, ReactJS, VueJS, Postgres, SQL, AWS, Azure, DevOps, Docker, Kubernetes, PySpark, ETL, ELT, Node.js, FastAPI, Django, Flask
+        1. Role Title: Contains one of:
+           • "Data Engineer"
+           • "Software Engineer"
+           • "Associate Software Developer"
+           • "Backend Developer"
+           • "Full Stack Developer"
+           or any software development roles dont stress to much on this not so imporant becasue titles may variy but focus on the skills and experince
 
-            3. Experience Level: 0-2 years experience ("entry level", "freshers", "0-2 years", "1 year", etc.)
+        2. Skills Match: Mentions at least **two-three** of these skills (case-insensitive):
+           Python, ReactJS, VueJS, Postgres, SQL, AWS, Azure, DevOps, Docker, Kubernetes, PySpark, ETL, ELT, Node.js, FastAPI
 
-            Return only the JSON array of filtered job objects, no extra text.
+        3. Experience Level: Specifies or implies **0–2 years** of experience (e.g., "0–2 years," "entry level," "freshers," "1 year," "up to 2 years")
 
-            Jobs: {json.dumps(chunk)}
-            """
+        Respond with a JSON array containing only the filtered job objects. Do not include any extra text or explanation—only the JSON array.
+
+        Jobs JSON:
+        {json.dumps(chunk)}
+        """
 
             try:
                 resp = self.gemini_client.models.generate_content(
@@ -203,18 +224,17 @@ class GitHubActionsJobScraper:
                     contents=prompt,
                     config=config
                 )
+                # The SDK will validate against our schema and return JSON text
                 subset = json.loads(resp.text)
                 filtered.extend(subset)
-                logger.info(f"Chunk {i // chunk_size + 1}: {len(subset)} jobs passed filter")
-
+                logger.info("Chunk %d–%d returned %d jobs", start, start+10, len(subset))
             except Exception as e:
-                logger.warning(f"Gemini filtering failed for chunk {i // chunk_size + 1}: {e}")
-                continue
+                logger.warning("Chunk %d–%d failed: %s", start, start+10, e)
 
-        # Remove duplicates
-        unique_filtered = {job["job_id"]: job for job in filtered}.values()
-        logger.info(f"Total filtered jobs: {len(list(unique_filtered))}")
-        return list(unique_filtered)
+        # Deduplicate by job_id
+        unique_jobs = {job["job_id"]: job for job in filtered}.values()
+        logger.info("Filtered %d unique jobs", len(list(unique_jobs)))
+        return list(unique_jobs)
 
     def update_daily_stats(self, new_jobs_count, new_filtered_count):
         """Update daily statistics"""
@@ -464,12 +484,12 @@ def main():
     logger.info("🎬 Starting GitHub Actions Job Scraper")
 
     # Validate environment variables
-    required_vars = ['GEMINI_API_KEY', 'GMAIL_EMAIL', 'GMAIL_APP_PASSWORD']
-    missing_vars = [var for var in required_vars if not os.getenv(var)]
-
-    if missing_vars:
-        logger.error(f"❌ Missing environment variables: {missing_vars}")
-        raise ValueError(f"Missing required environment variables: {missing_vars}")
+    # required_vars = ['GEMINI_API_KEY', 'GMAIL_EMAIL',]
+    # missing_vars = [var for var in required_vars if not os.getenv(var)]
+    #
+    # if missing_vars:
+    #     logger.error(f"❌ Missing environment variables: {missing_vars}")
+    #     raise ValueError(f"Missing required environment variables: {missing_vars}")
 
     # Create and run scraper
     scraper = GitHubActionsJobScraper()
