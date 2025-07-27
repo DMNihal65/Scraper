@@ -8,7 +8,6 @@ on:
     - cron: '0 12 * * *'  # 12 PM UTC
     - cron: '0 18 * * *'  # 6 PM UTC
     - cron: '0 0 * * *'   # 12 AM UTC
-
   # Allow manual trigger
   workflow_dispatch:
 
@@ -27,20 +26,16 @@ jobs:
       with:
         python-version: '3.9'
 
-    - name: Install Chrome
-      run: |
-        wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-        echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
-        sudo apt-get update
-        sudo apt-get install -y google-chrome-stable
+    - name: Setup Chrome and ChromeDriver
+      uses: browser-actions/setup-chrome@v1
+      with:
+        chrome-version: stable
+        install-chromedriver: true
 
-    - name: Install ChromeDriver
+    - name: Verify Chrome and ChromeDriver versions
       run: |
-        CHROMEDRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE)
-        wget -N http://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip
-        unzip chromedriver_linux64.zip
-        sudo mv chromedriver /usr/bin/chromedriver
-        sudo chmod +x /usr/bin/chromedriver
+        google-chrome --version
+        chromedriver --version
 
     - name: Install Python dependencies
       run: |
