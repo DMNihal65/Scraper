@@ -1,8 +1,8 @@
 [
   {
     "date": "2025-07-27",
-    "runs": 5,
-    "total_scraped": 31,
+    "runs": 6,
+    "total_scraped": 33,
     "total_filtered": 4,
     "runs_detail": [
       {
@@ -29,6 +29,11 @@
         "time": "10:58",
         "scraped": 12,
         "filtered": 1
+      },
+      {
+        "time": "05:49",
+        "scraped": 2,
+        "filtered": 0
       }
     ]
   }
