@@ -62,6 +62,9 @@
     "runs": 2,
     "total_scraped": 22,
     "total_filtered": 3,
+    "runs": 2,
+    "total_scraped": 50,
+    "total_filtered": 6,
     "runs_detail": [
       {
         "time": "01:04",
@@ -72,6 +75,11 @@
         "time": "11:13",
         "scraped": 0,
         "filtered": 0
+      },
+      {
+        "time": "05:54",
+        "scraped": 28,
+        "filtered": 3
       }
     ]
   }
