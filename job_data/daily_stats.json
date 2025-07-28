@@ -59,11 +59,8 @@
   },
   {
     "date": "2025-07-28",
-    "runs": 2,
-    "total_scraped": 22,
-    "total_filtered": 3,
-    "runs": 2,
-    "total_scraped": 50,
+    "runs": 3,
+    "total_scraped": 52,
     "total_filtered": 6,
     "runs_detail": [
       {
@@ -80,6 +77,11 @@
         "time": "05:54",
         "scraped": 28,
         "filtered": 3
+      },
+      {
+        "time": "06:00",
+        "scraped": 2,
+        "filtered": 0
       }
     ]
   }
