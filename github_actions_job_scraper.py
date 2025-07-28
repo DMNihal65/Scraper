@@ -161,7 +161,7 @@ class GitHubActionsJobScraper:
             return []
 
     def filter_with_gemini(self, jobs_to_filter):
-        """Filter jobs using Gemini API - matches working code exactly"""
+        """Filter jobs using Gemini API - Fixed to preserve all job fields"""
         if not jobs_to_filter:
             logger.info("No jobs to filter")
             return []
@@ -169,15 +169,20 @@ class GitHubActionsJobScraper:
         # Initialize empty list for filtered results
         filtered = []
 
-        # Define a minimal JSON schema: an array of objects with at least job_id
+        # Updated JSON schema to include ALL required fields
         schema = types.Schema(
             type=types.Type.ARRAY,
             items=types.Schema(
                 type=types.Type.OBJECT,
                 properties={
-                    "job_id": types.Schema(type=types.Type.STRING)
+                    "job_id": types.Schema(type=types.Type.STRING),
+                    "title": types.Schema(type=types.Type.STRING),
+                    "company": types.Schema(type=types.Type.STRING),
+                    "location": types.Schema(type=types.Type.STRING),
+                    "date": types.Schema(type=types.Type.STRING),
+                    "link": types.Schema(type=types.Type.STRING)
                 },
-                required=["job_id"],
+                required=["job_id", "title", "company", "location", "date", "link"],
             )
         )
 
@@ -193,7 +198,7 @@ class GitHubActionsJobScraper:
             if not chunk:
                 continue
 
-            # Use exact same prompt as working code
+            # Updated prompt to explicitly request all fields in response
             prompt = f"""
         You receive a JSON array of LinkedIn job postings. Each posting includes fields: job_id, title, company, location, date, link, and description.
 
@@ -212,7 +217,9 @@ class GitHubActionsJobScraper:
 
         3. Experience Level: Specifies or implies **0–2 years** of experience (e.g., "0–2 years," "entry level," "freshers," "1 year," "up to 2 years")
 
-        Respond with a JSON array containing only the filtered job objects. Do not include any extra text or explanation—only the JSON array.
+        IMPORTANT: For each filtered job, return the complete job object including ALL fields: job_id, title, company, location, date, and link. Do NOT include the description field, but keep all other fields exactly as provided.
+
+        Respond with a JSON array containing only the filtered job objects with all required fields. Do not include any extra text or explanation—only the JSON array.
 
         Jobs JSON:
         {json.dumps(chunk)}
@@ -224,12 +231,25 @@ class GitHubActionsJobScraper:
                     contents=prompt,
                     config=config
                 )
-                # The SDK will validate against our schema and return JSON text
+                
+                # Parse response and validate we have all required fields
                 subset = json.loads(resp.text)
+                
+                # Ensure all jobs have required fields, fallback to original data if needed
+                for job in subset:
+                    original_job = next((j for j in chunk if j['job_id'] == job['job_id']), None)
+                    if original_job:
+                        # Ensure all required fields are present, fallback to original if missing
+                        for field in ['job_id', 'title', 'company', 'location', 'date', 'link']:
+                            if not job.get(field) or job.get(field) == 'N/A':
+                                job[field] = original_job.get(field, 'N/A')
+                
                 filtered.extend(subset)
                 logger.info("Chunk %d–%d returned %d jobs", start, start+10, len(subset))
+                
             except Exception as e:
                 logger.warning("Chunk %d–%d failed: %s", start, start+10, e)
+                # If Gemini fails, we could implement a fallback or continue
 
         # Deduplicate by job_id
         unique_jobs = {job["job_id"]: job for job in filtered}.values()
@@ -314,12 +334,19 @@ class GitHubActionsJobScraper:
             if new_filtered_count > 0:
                 body += f"\n🎯 New Filtered Jobs Found:\n{'-' * 40}\n"
                 for i, job in enumerate(new_filtered_jobs[:3], 1):  # Show first 3
+                    # Use .get() with fallback to handle missing fields gracefully
+                    title = job.get('title', 'N/A')
+                    company = job.get('company', 'N/A')
+                    location = job.get('location', 'N/A')
+                    link = job.get('link', 'N/A')
+                    date = job.get('date', 'N/A')
+                    
                     body += f"""
-{i}. 💼 {job.get('title', 'N/A')}
-   🏢 Company: {job.get('company', 'N/A')}
-   📍 Location: {job.get('location', 'N/A')}
-   🔗 Link: {job.get('link', 'N/A')}
-   📅 Posted: {job.get('date', 'N/A')}
+{i}. 💼 {title}
+   🏢 Company: {company}
+   📍 Location: {location}
+   🔗 Link: {link}
+   📅 Posted: {date}
 
 """
                 if len(new_filtered_jobs) > 3:
@@ -337,10 +364,24 @@ Happy job hunting! 🚀
 
             msg.attach(MIMEText(body, 'plain'))
 
-            # Attach new jobs if any
+            # Attach new jobs if any - ensure we save complete job objects
             if new_filtered_count > 0:
                 attachment = MIMEBase('application', 'octet-stream')
-                attachment_data = json.dumps(new_filtered_jobs, indent=2, ensure_ascii=False)
+                
+                # Create clean job objects for attachment (without description)
+                clean_jobs = []
+                for job in new_filtered_jobs:
+                    clean_job = {
+                        'job_id': job.get('job_id', 'N/A'),
+                        'title': job.get('title', 'N/A'),
+                        'company': job.get('company', 'N/A'),
+                        'location': job.get('location', 'N/A'),
+                        'date': job.get('date', 'N/A'),
+                        'link': job.get('link', 'N/A')
+                    }
+                    clean_jobs.append(clean_job)
+                
+                attachment_data = json.dumps(clean_jobs, indent=2, ensure_ascii=False)
                 attachment.set_payload(attachment_data.encode('utf-8'))
                 encoders.encode_base64(attachment)
                 attachment.add_header(
@@ -408,9 +449,20 @@ Happy job hunting! 🚀
 
             logger.info(f"✨ Found {len(truly_new_filtered)} new filtered jobs")
 
+            # Create clean versions for storage (without description)
+            clean_new_jobs = []
+            for job in new_jobs:
+                clean_job = {k: v for k, v in job.items() if k != 'description'}
+                clean_new_jobs.append(clean_job)
+
+            clean_filtered_jobs = []
+            for job in truly_new_filtered:
+                clean_job = {k: v for k, v in job.items() if k != 'description'}
+                clean_filtered_jobs.append(clean_job)
+
             # Update histories
-            all_jobs_history.extend(new_jobs)
-            filtered_jobs_history.extend(truly_new_filtered)
+            all_jobs_history.extend(clean_new_jobs)
+            filtered_jobs_history.extend(clean_filtered_jobs)
 
             # Save updated data
             self.save_json_file(all_jobs_history, ALL_JOBS_FILE)
