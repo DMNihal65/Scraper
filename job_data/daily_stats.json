@@ -127,5 +127,18 @@
         "filtered": 2
       }
     ]
+  },
+  {
+    "date": "2025-07-30",
+    "runs": 1,
+    "total_scraped": 21,
+    "total_filtered": 5,
+    "runs_detail": [
+      {
+        "time": "01:01",
+        "scraped": 21,
+        "filtered": 5
+      }
+    ]
   }
 ]
