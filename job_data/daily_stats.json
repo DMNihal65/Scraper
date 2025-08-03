@@ -242,14 +242,19 @@
   },
   {
     "date": "2025-08-03",
-    "runs": 1,
-    "total_scraped": 14,
-    "total_filtered": 2,
+    "runs": 2,
+    "total_scraped": 23,
+    "total_filtered": 3,
     "runs_detail": [
       {
         "time": "01:07",
         "scraped": 14,
         "filtered": 2
+      },
+      {
+        "time": "06:23",
+        "scraped": 9,
+        "filtered": 1
       }
     ]
   }
