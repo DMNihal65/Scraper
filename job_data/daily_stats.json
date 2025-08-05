@@ -298,9 +298,9 @@
   },
   {
     "date": "2025-08-05",
-    "runs": 3,
-    "total_scraped": 66,
-    "total_filtered": 8,
+    "runs": 4,
+    "total_scraped": 94,
+    "total_filtered": 13,
     "runs_detail": [
       {
         "time": "01:02",
@@ -316,6 +316,11 @@
         "time": "12:46",
         "scraped": 22,
         "filtered": 2
+      },
+      {
+        "time": "18:28",
+        "scraped": 28,
+        "filtered": 5
       }
     ]
   }
