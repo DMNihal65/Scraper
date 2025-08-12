@@ -494,12 +494,17 @@
   },
   {
     "date": "2025-08-12",
-    "runs": 1,
+    "runs": 2,
     "total_scraped": 0,
     "total_filtered": 0,
     "runs_detail": [
       {
         "time": "00:53",
+        "scraped": 0,
+        "filtered": 0
+      },
+      {
+        "time": "06:22",
         "scraped": 0,
         "filtered": 0
       }
