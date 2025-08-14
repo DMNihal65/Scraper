@@ -550,7 +550,7 @@
   },
   {
     "date": "2025-08-14",
-    "runs": 3,
+    "runs": 4,
     "total_scraped": 0,
     "total_filtered": 0,
     "runs_detail": [
@@ -566,6 +566,11 @@
       },
       {
         "time": "12:41",
+        "scraped": 0,
+        "filtered": 0
+      },
+      {
+        "time": "18:21",
         "scraped": 0,
         "filtered": 0
       }
