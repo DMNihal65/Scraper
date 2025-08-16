@@ -606,14 +606,19 @@
   },
   {
     "date": "2025-08-16",
-    "runs": 1,
-    "total_scraped": 22,
+    "runs": 2,
+    "total_scraped": 38,
     "total_filtered": 1,
     "runs_detail": [
       {
         "time": "00:56",
         "scraped": 22,
         "filtered": 1
+      },
+      {
+        "time": "06:23",
+        "scraped": 16,
+        "filtered": 0
       }
     ]
   }
