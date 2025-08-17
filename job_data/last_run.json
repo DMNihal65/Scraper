@@ -1,8 +1,8 @@
 {
-  "timestamp": "2025-08-17T12:39:59.141306",
-  "new_jobs": 17,
-  "new_filtered": 0,
-  "total_jobs": 1221,
-  "total_filtered": 113,
+  "timestamp": "2025-08-17T18:22:10.524752",
+  "new_jobs": 6,
+  "new_filtered": 2,
+  "total_jobs": 1227,
+  "total_filtered": 115,
   "github_action_run": true
 }
