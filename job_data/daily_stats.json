@@ -634,8 +634,8 @@
   },
   {
     "date": "2025-08-17",
-    "runs": 2,
-    "total_scraped": 20,
+    "runs": 3,
+    "total_scraped": 37,
     "total_filtered": 3,
     "runs_detail": [
       {
@@ -647,6 +647,11 @@
         "time": "06:24",
         "scraped": 10,
         "filtered": 2
+      },
+      {
+        "time": "12:39",
+        "scraped": 17,
+        "filtered": 0
       }
     ]
   }
