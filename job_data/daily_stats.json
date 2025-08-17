@@ -634,14 +634,19 @@
   },
   {
     "date": "2025-08-17",
-    "runs": 1,
-    "total_scraped": 10,
-    "total_filtered": 1,
+    "runs": 2,
+    "total_scraped": 20,
+    "total_filtered": 3,
     "runs_detail": [
       {
         "time": "01:01",
         "scraped": 10,
         "filtered": 1
+      },
+      {
+        "time": "06:24",
+        "scraped": 10,
+        "filtered": 2
       }
     ]
   }
