@@ -659,5 +659,18 @@
         "filtered": 2
       }
     ]
+  },
+  {
+    "date": "2025-08-18",
+    "runs": 1,
+    "total_scraped": 9,
+    "total_filtered": 0,
+    "runs_detail": [
+      {
+        "time": "01:00",
+        "scraped": 9,
+        "filtered": 0
+      }
+    ]
   }
 ]
