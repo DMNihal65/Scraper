@@ -662,14 +662,19 @@
   },
   {
     "date": "2025-08-18",
-    "runs": 1,
-    "total_scraped": 9,
-    "total_filtered": 0,
+    "runs": 2,
+    "total_scraped": 25,
+    "total_filtered": 1,
     "runs_detail": [
       {
         "time": "01:00",
         "scraped": 9,
         "filtered": 0
+      },
+      {
+        "time": "06:28",
+        "scraped": 16,
+        "filtered": 1
       }
     ]
   }
