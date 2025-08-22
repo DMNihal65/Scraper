@@ -774,14 +774,19 @@
   },
   {
     "date": "2025-08-22",
-    "runs": 1,
-    "total_scraped": 24,
-    "total_filtered": 5,
+    "runs": 2,
+    "total_scraped": 40,
+    "total_filtered": 8,
     "runs_detail": [
       {
         "time": "00:55",
         "scraped": 24,
         "filtered": 5
+      },
+      {
+        "time": "06:24",
+        "scraped": 16,
+        "filtered": 3
       }
     ]
   }
