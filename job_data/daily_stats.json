@@ -1,63 +1,5 @@
 [
   {
-    "date": "2025-07-27",
-    "runs": 10,
-    "total_scraped": 156,
-    "total_filtered": 10,
-    "runs_detail": [
-      {
-        "time": "02:06",
-        "scraped": 0,
-        "filtered": 0
-      },
-      {
-        "time": "10:44",
-        "scraped": 0,
-        "filtered": 0
-      },
-      {
-        "time": "10:47",
-        "scraped": 0,
-        "filtered": 0
-      },
-      {
-        "time": "10:53",
-        "scraped": 19,
-        "filtered": 3
-      },
-      {
-        "time": "10:58",
-        "scraped": 12,
-        "filtered": 1
-      },
-      {
-        "time": "05:49",
-        "scraped": 2,
-        "filtered": 0
-      },
-      {
-        "time": "06:04",
-        "scraped": 26,
-        "filtered": 0
-      },
-      {
-        "time": "06:25",
-        "scraped": 36,
-        "filtered": 2
-      },
-      {
-        "time": "12:42",
-        "scraped": 28,
-        "filtered": 1
-      },
-      {
-        "time": "18:24",
-        "scraped": 33,
-        "filtered": 3
-      }
-    ]
-  },
-  {
     "date": "2025-07-28",
     "runs": 6,
     "total_scraped": 129,
@@ -881,6 +823,19 @@
         "time": "18:23",
         "scraped": 36,
         "filtered": 0
+      }
+    ]
+  },
+  {
+    "date": "2025-08-26",
+    "runs": 1,
+    "total_scraped": 22,
+    "total_filtered": 3,
+    "runs_detail": [
+      {
+        "time": "00:55",
+        "scraped": 22,
+        "filtered": 3
       }
     ]
   }
