@@ -813,14 +813,19 @@
   },
   {
     "date": "2025-08-29",
-    "runs": 1,
-    "total_scraped": 18,
-    "total_filtered": 0,
+    "runs": 2,
+    "total_scraped": 28,
+    "total_filtered": 1,
     "runs_detail": [
       {
         "time": "00:52",
         "scraped": 18,
         "filtered": 0
+      },
+      {
+        "time": "06:24",
+        "scraped": 10,
+        "filtered": 1
       }
     ]
   }
