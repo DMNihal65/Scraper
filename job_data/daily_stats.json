@@ -813,8 +813,8 @@
   },
   {
     "date": "2025-08-30",
-    "runs": 2,
-    "total_scraped": 33,
+    "runs": 3,
+    "total_scraped": 48,
     "total_filtered": 2,
     "runs_detail": [
       {
@@ -826,6 +826,11 @@
         "time": "06:21",
         "scraped": 12,
         "filtered": 1
+      },
+      {
+        "time": "12:37",
+        "scraped": 15,
+        "filtered": 0
       }
     ]
   }
