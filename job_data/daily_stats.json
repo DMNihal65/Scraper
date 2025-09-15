@@ -1,33 +1,5 @@
 [
   {
-    "date": "2025-08-16",
-    "runs": 4,
-    "total_scraped": 76,
-    "total_filtered": 4,
-    "runs_detail": [
-      {
-        "time": "00:56",
-        "scraped": 22,
-        "filtered": 1
-      },
-      {
-        "time": "06:23",
-        "scraped": 16,
-        "filtered": 0
-      },
-      {
-        "time": "12:39",
-        "scraped": 25,
-        "filtered": 2
-      },
-      {
-        "time": "18:22",
-        "scraped": 13,
-        "filtered": 1
-      }
-    ]
-  },
-  {
     "date": "2025-08-17",
     "runs": 4,
     "total_scraped": 43,
@@ -834,6 +806,19 @@
       },
       {
         "time": "18:17",
+        "scraped": 0,
+        "filtered": 0
+      }
+    ]
+  },
+  {
+    "date": "2025-09-15",
+    "runs": 1,
+    "total_scraped": 0,
+    "total_filtered": 0,
+    "runs_detail": [
+      {
+        "time": "00:54",
         "scraped": 0,
         "filtered": 0
       }
